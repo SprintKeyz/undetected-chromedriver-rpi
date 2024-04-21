@@ -119,7 +119,6 @@ class Patcher(Chrome_Version, object):
         self.version_full = None
 
     def auto(self, executable_path=None, force=False, version_main=None):
-        """"""
         if executable_path:
             self.executable_path = executable_path
             self._custom_exe_path = True
@@ -196,7 +195,6 @@ class Patcher(Chrome_Version, object):
         else:
             u = "%s/%s/%s" % (self.url_repo, self.version_full.vstring, self.zip_name)
         logger.debug("downloading from %s" % u)
-        print(u)
         # return urlretrieve(u, filename=self.data_path)[0]
         return urlretrieve(u)[0]
 
@@ -217,7 +215,6 @@ class Patcher(Chrome_Version, object):
             zf.extract(self.exe_name, os.path.dirname(self.executable_path))
         os.remove(fp)
         os.chmod(self.executable_path, 0o755)
-        print(self.executable_path)
         return self.executable_path
 
     @staticmethod
