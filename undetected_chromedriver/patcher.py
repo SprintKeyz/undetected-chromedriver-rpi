@@ -11,7 +11,7 @@ import sys
 import zipfile
 import subprocess
 from distutils.version import LooseVersion
-from urllib.request import urlopen, urlretrieve
+from urllib.request import urlretrieve
 
 logger = logging.getLogger(__name__)
 
@@ -156,6 +156,7 @@ class Patcher(Chrome_Version, object):
             release = self.fetch_release_number()
             self.version_main = release.version[0]
             self.version_full = release
+        
         self.unzip_package(self.fetch_package())
         # i.patch()
         return self.patch()
@@ -196,7 +197,19 @@ class Patcher(Chrome_Version, object):
             u = "%s/%s/%s" % (self.url_repo, self.version_full.vstring, self.zip_name)
         logger.debug("downloading from %s" % u)
         # return urlretrieve(u, filename=self.data_path)[0]
-        return urlretrieve(u)[0]
+
+        FNAME = "chromedriver-armv7-package.zip"
+
+        FPATH = os.path.join("~/chromedriver-downloads", FNAME)
+        is_downloaded = True
+
+        if not os.path.isfile(FPATH):
+            is_downloaded = False
+            print("Downloading driver to " + FPATH + "...")
+            urlretrieve(u, FPATH)
+            print("Driver downloaded!")
+
+        return FPATH
 
     def unzip_package(self, fp):
         """
@@ -213,7 +226,6 @@ class Patcher(Chrome_Version, object):
 
         with zipfile.ZipFile(fp, mode="r") as zf:
             zf.extract(self.exe_name, os.path.dirname(self.executable_path))
-        os.remove(fp)
         os.chmod(self.executable_path, 0o755)
         return self.executable_path
 
