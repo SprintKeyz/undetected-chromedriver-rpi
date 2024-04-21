@@ -200,8 +200,11 @@ class Patcher(Chrome_Version, object):
 
         FNAME = "chromedriver-armv7-package.zip"
 
-        FPATH = os.path.join("~/chromedriver-downloads", FNAME)
+        FPATH = os.path.join(os.path.expanduser("~"), "chromedriver-downloads", FNAME)
         is_downloaded = True
+
+        # make dirs
+        os.makedirs(os.path.dirname(FPATH), exist_ok=True)
 
         if not os.path.isfile(FPATH):
             is_downloaded = False
